@@ -13,10 +13,10 @@ import (
 type UserService struct {
 }
 
-//注册函数
+// Register /**注册函数
 func (s *UserService) Register(
-	mobile,   //手机
-	plainpwd, //明文密码
+	mobile, //手机
+	password, //明文密码
 	nickname, //昵称
 	avatar, sex string) (user model.User, err error) {
 
@@ -36,7 +36,7 @@ func (s *UserService) Register(
 	tmp.Nickname = nickname
 	tmp.Sex = sex
 	tmp.Salt = fmt.Sprintf("%06d", rand.Int31n(10000))
-	tmp.Passwd = util.MakePasswd(plainpwd, tmp.Salt)
+	tmp.Passwd = util.MakePasswd(password, tmp.Salt)
 	tmp.Createat = time.Now()
 	//token 可以是一个随机数
 	tmp.Token = fmt.Sprintf("%08d", rand.Int31())
@@ -51,7 +51,7 @@ func (s *UserService) Register(
 	return tmp, err
 }
 
-//登录函数
+// Login 登录函数
 func (s *UserService) Login(
 	mobile, //手机
 	plainpwd string) (user model.User, err error) {
@@ -74,4 +74,14 @@ func (s *UserService) Login(
 	//返回数据
 	DbEngin.ID(tmp.Id).Cols("token").Update(&tmp)
 	return tmp, nil
+}
+
+// Find 查找某个用户
+func (s *UserService) Find(
+	userId int64) (user model.User) {
+
+	//首先通过手机号查询用户
+	tmp := model.User{}
+	DbEngin.ID(userId).Get(&tmp)
+	return tmp
 }

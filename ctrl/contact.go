@@ -25,6 +25,7 @@ func LoadCommunity(w http.ResponseWriter, req *http.Request) {
 	comunitys := contactService.SearchComunity(arg.Userid)
 	util.RespOkList(w, comunitys, len(comunitys))
 }
+
 func JoinCommunity(w http.ResponseWriter, req *http.Request) {
 	var arg args.ContactArg
 
@@ -38,7 +39,6 @@ func JoinCommunity(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
-//
 func Addfriend(w http.ResponseWriter, req *http.Request) {
 	//定义一个参数结构体
 	/*request.ParseForm()
